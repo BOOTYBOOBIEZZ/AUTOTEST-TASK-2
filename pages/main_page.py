@@ -7,7 +7,15 @@ class MainPage:
         self.search_bar = page.get_by_test_id("search-input")
         self.search_button = page.get_by_test_id("search-button")
         self.sort_select = page.get_by_test_id("filter-sort")
-        self.options = page.locator('[data-testid="filter-sort"]')
+        # self.option_low_high = page.get_by_role("option").get_by_text
+        # )
+        # self.option_high_low = page.get_by_test_id("filter-sort").get_by_text(
+        #     "Price: High to Low"
+        # )
+
+        # self.option_low_high = self.sort_select.get_by_text("Price: Low to High")
+        # self.option_high_low = self.sort_select.get_by_text("Price: High to Low")
+
         self.apply_button = page.get_by_test_id("apply-filters-button")
         self.article_price = page.get_by_test_id("search-result-price-1")
         self._loader = page.get_by_test_id("results-loader-svg")
@@ -32,16 +40,10 @@ class MainPage:
     #     self.options.wait_for(state="attached")
 
     def sort_by_price_low_to_high(self):
-        self.sort_select.locator('option[value="price_asc"]').wait_for(state="attached")
-
-        self.sort_select.select_option("price-asc")
+        self.sort_select.select_option("price_asc")
 
     def sort_by_price_high_to_low(self):
-        self.sort_select.locator('option[value="price_desc"]').wait_for(
-            state="attached"
-        )
-
-        self.sort_select.select_option("price-desc")
+        self.sort_select.select_option("price_desc")
 
     def apply_filter(self):
         self.apply_button.click()
