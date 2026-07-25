@@ -1,7 +1,8 @@
 {
     "environment": "staging",
     "urls": {
-        "base_url": "http://144.31.63.127:5000/"
+        "base_url": "http://144.31.63.127:5000/",
+        "search_url": "http://144.31.63.127:5000/search"
     },
     "browsers": {
         "default": "chromium",

@@ -1,27 +1,33 @@
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 
 class ConfigReader:
-    _instance = None
+    _instances: dict[Path, "ConfigReader"] = {}
 
-    _initialized: bool = False
+    def __new__(cls, config_path: Path | None = None):
+        if config_path is None:
+            config_path = Path(__file__).parent.parent / "config.json"
+        else:
+            config_path = Path(config_path).resolve()
 
-    def __new__(cls, config_path: Optional[Path] = None):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+        if config_path in cls._instances:
+            return cls._instances[config_path]
 
-    def __init__(self, config_path: Optional[Path] = None):
-        if ConfigReader._initialized:
+        instance = super().__new__(cls)
+        cls._instances[config_path] = instance
+        return instance
+
+    def __init__(self, config_path: Path | None = None):
+        if hasattr(self, "_config"):
             return
 
         if config_path is None:
             self._config_path = Path(__file__).parent.parent / "config.json"
 
         else:
-            self._config_path = config_path
+            self._config_path = Path(config_path).resolve()
 
         self._config: dict[str, Any] = self._load_config()
         ConfigReader._initialized = True
@@ -44,6 +50,3 @@ class ConfigReader:
             else:
                 return default
         return current
-
-
-config = ConfigReader()
