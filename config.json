@@ -1,0 +1,15 @@
+{
+    "environment": "staging",
+    "urls": {
+        "base_url": "http://144.31.63.127:5000/"
+    },
+    "browsers": {
+        "default": "chromium",
+        "headless": true,
+        "slow_mo": 0,
+        "viewport": {
+            "width": 1920,
+            "height": 1080
+        }
+    }
+}
