@@ -20,7 +20,7 @@ class ConfigReader:
         return instance
 
     def __init__(self, config_path: Path | None = None):
-        if hasattr(self, "_config"):
+        if self._config is None:
             return
 
         if config_path is None:

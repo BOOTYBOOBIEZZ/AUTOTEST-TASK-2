@@ -6,7 +6,6 @@ class MainPage:
         self.page = page
         self.search_bar = page.get_by_test_id("search-input")
         self.search_button = page.get_by_test_id("search-button")
-        self._loader = page.get_by_test_id("results-loader-svg")
 
     def click_search_bar(self):
         self.search_bar.click()

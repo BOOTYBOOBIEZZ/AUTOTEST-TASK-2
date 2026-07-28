@@ -1,6 +1,12 @@
+from enum import StrEnum
+
 from playwright.sync_api import Page
 
-from utils.enums.sort_options import SortOption
+
+class SortOption(StrEnum):
+    RELEVANCE = "relevance"
+    PRICE_LOW_TO_HIGH = "price_asc"
+    PRICE_HIGH_TO_LOW = "price_desc"
 
 
 class SearchPage:
@@ -8,7 +14,7 @@ class SearchPage:
         self.page = page
         self.sort_select = page.get_by_test_id("filter-sort")
         self.search_bar = page.get_by_test_id("search-input")
-        self._loader = page.get_by_test_id("results-loader-svg")
+        self.loader = page.get_by_test_id("results-loader-svg")
         self.apply_button = page.get_by_test_id("apply-filters-button")
         self.search_button = page.get_by_test_id("search-button")
 
@@ -22,8 +28,8 @@ class SearchPage:
         self.search_button.click()
 
     def wait_for_loader_dissappear(self):
-        self._loader.wait_for(state="visible")
-        self._loader.wait_for(state="hidden")
+        self.loader.wait_for(state="visible")
+        self.loader.wait_for(state="hidden")
 
     def click_sort_select(self):
         self.sort_select.click()

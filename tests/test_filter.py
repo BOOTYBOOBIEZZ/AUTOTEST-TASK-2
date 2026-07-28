@@ -20,10 +20,10 @@ def test_filter_low_to_high(page: Page, search_query, n):
 
     page.goto(search_url)
     search_page = SearchPage(page)
-    search_page.wait_for_loader_dissappear()
 
     search_page.click_sort_select()
     search_page.sort_by_price_low_to_high()
+    search_page.wait_for_loader_dissappear()
 
     prices = search_page.get_prices(n)
 
@@ -44,15 +44,15 @@ def test_filter_high_to_low(page: Page, search_query, n):
 
     page.goto(search_url)
     search_page = SearchPage(page)
-    search_page.wait_for_loader_dissappear()
 
     search_page.click_sort_select()
     search_page.sort_by_price_high_to_low()
+    search_page.wait_for_loader_dissappear()
 
     prices = search_page.get_prices(n)
 
     actual = prices
-    expected = sorted(prices)
+    expected = sorted(prices, reverse=True)
     assert actual == expected, (
-        f"Prices not sorted ascending.\nExpected: {expected}\nActual: {actual}"
+        f"Prices not sorted descending.\nExpected: {expected}\nActual: {actual}"
     )
