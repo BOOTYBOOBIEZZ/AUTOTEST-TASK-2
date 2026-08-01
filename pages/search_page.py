@@ -39,16 +39,6 @@ class SearchPage:
     def apply_filter(self):
         self.apply_button.click()
 
-    # def get_prices(self, n):
-    #     prices = []
-    #     for i in range(1, n + 1):
-    #         price_locator = self.page.locator(
-    #             f'[data-testid="search-result-price-{i}"]'
-    #         )
-    #         price_text = price_locator.text_content()
-    #         prices.append(price_text)
-    #     return prices
-
     def get_prices(self, n: int) -> list[int]:
         cards = self.page.locator("article.news-card").all()[:n]
 

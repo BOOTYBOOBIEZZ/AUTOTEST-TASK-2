@@ -8,8 +8,6 @@ from pages.search_page import SearchPage, SortOption
 from utils.config_reader import ConfigReader
 
 config = ConfigReader()
-# base_url = config.get_nested("urls", "base_url")
-# search_url = config.get_nested("urls", "search_url")
 
 SORTS = [(SortOption.PRICE_LOW_TO_HIGH), (SortOption.PRICE_HIGH_TO_LOW)]
 QUERIES = ["city", "habits"]
