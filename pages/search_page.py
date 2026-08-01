@@ -33,21 +33,30 @@ class SearchPage:
     def click_sort_select(self):
         self.sort_select.click()
 
-    def sort_by_price_low_to_high(self):
-        self.sort_select.select_option(SortOption.PRICE_LOW_TO_HIGH)
-
-    def sort_by_price_high_to_low(self):
-        self.sort_select.select_option(SortOption.PRICE_HIGH_TO_LOW)
+    def sort_by(self, option: SortOption):
+        self.sort_select.select_option(option.value)
 
     def apply_filter(self):
         self.apply_button.click()
 
-    def get_prices(self, n):
+    # def get_prices(self, n):
+    #     prices = []
+    #     for i in range(1, n + 1):
+    #         price_locator = self.page.locator(
+    #             f'[data-testid="search-result-price-{i}"]'
+    #         )
+    #         price_text = price_locator.text_content()
+    #         prices.append(price_text)
+    #     return prices
+
+    def get_prices(self, n: int) -> list[int]:
+        cards = self.page.locator("article.news-card").all()[:n]
+
         prices = []
-        for i in range(1, n + 1):
-            price_locator = self.page.locator(
-                f'[data-testid="search-result-price-{i}"]'
-            )
-            price_text = price_locator.text_content()
-            prices.append(price_text)
+        for card in cards:
+            price_attr = card.locator("[data-price]").get_attribute("data-price")
+            if price_attr is None:
+                raise ValueError("data-price attribute not found in card")
+            prices.append(int(price_attr))
+
         return prices

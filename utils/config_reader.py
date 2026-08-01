@@ -4,42 +4,32 @@ from typing import Any
 
 
 class ConfigReader:
-    _instances: dict[Path, "ConfigReader"] = {}
+    _instances: dict[str, "ConfigReader"] = {}
+    _config_path: Path
+    _config: dict[str, Any]
 
-    def __new__(cls, config_path: Path | None = None):
+    def __new__(cls, config_path: str | Path | None = None) -> "ConfigReader":
         if config_path is None:
             config_path = Path(__file__).parent.parent / "config.json"
-        else:
-            config_path = Path(config_path).resolve()
 
-        if config_path in cls._instances:
-            return cls._instances[config_path]
+        config_path = str(Path(config_path).resolve())
 
-        instance = super().__new__(cls)
-        cls._instances[config_path] = instance
-        return instance
+        if config_path not in cls._instances:
+            instance = super().__new__(cls)
+            instance._config_path = Path(config_path)
+            instance._config = instance._load()
+            cls._instances[config_path] = instance
 
-    def __init__(self, config_path: Path | None = None):
-        if self._config is None:
-            return
+        return cls._instances[config_path]
 
-        if config_path is None:
-            self._config_path = Path(__file__).parent.parent / "config.json"
-
-        else:
-            self._config_path = Path(config_path).resolve()
-
-        self._config: dict[str, Any] = self._load_config()
-        ConfigReader._initialized = True
-
-    def _load_config(self):
+    def _load(self) -> dict[str, Any]:
         if not self._config_path.exists():
-            raise FileNotFoundError(f"Config not found:{self._config_path}")
-        with open(self._config_path, "r", encoding="utf-8") as file:
+            raise FileNotFoundError(f"Config not found: {self._config_path}")
+
+        with open(self._config_path, encoding="utf-8") as file:
             return json.load(file)
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Получить значение по ключу верхнего уровня"""
         return self._config.get(key, default)
 
     def get_nested(self, *keys: str, default: Any = None) -> Any:
