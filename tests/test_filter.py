@@ -1,5 +1,3 @@
-from itertools import product
-
 import pytest
 from playwright.sync_api import Page
 
@@ -9,28 +7,23 @@ from utils.config_reader import ConfigReader
 
 config = ConfigReader()
 
-SORTS = [(SortOption.PRICE_LOW_TO_HIGH), (SortOption.PRICE_HIGH_TO_LOW)]
-QUERIES = ["city", "habits"]
-NUMS = [10, 15]
 
-COMBINATIONS = list(product(SORTS, QUERIES, NUMS))
-
-
-@pytest.mark.parametrize("sort_type, search_query, n", COMBINATIONS)
-def test_filter(
+def run_filter_test(
     page: Page,
-    sort_type: SortOption,
     base_url: str,
     search_query: str,
+    sort_type: SortOption,
     n: int,
 ):
     page.goto(base_url)
+
     main_page = MainPage(page)
     main_page.click_search_bar()
     main_page.fill_search_bar(search_query)
     main_page.click_search_button()
 
     search_page = SearchPage(page)
+    search_page.wait_for_loader_dissappear()
 
     search_page.click_sort_select()
     search_page.sort_by(sort_type)
@@ -50,3 +43,25 @@ def test_filter(
         assert actual == expected, (
             f"Prices not sorted descending.\nExpected: {expected}\nActual: {actual}"
         )
+
+
+@pytest.mark.parametrize("search_query", ["city", "habits"])
+@pytest.mark.parametrize("n", [10])
+def test_filter_low_to_high(
+    page: Page,
+    base_url: str,
+    search_query: str,
+    n: int,
+):
+    run_filter_test(page, base_url, search_query, SortOption.PRICE_LOW_TO_HIGH, n)
+
+
+@pytest.mark.parametrize("search_query", ["city", "habits"])
+@pytest.mark.parametrize("n", [15])
+def test_filter_high_to_low(
+    page: Page,
+    base_url: str,
+    search_query: str,
+    n: int,
+):
+    run_filter_test(page, base_url, search_query, SortOption.PRICE_HIGH_TO_LOW, n)

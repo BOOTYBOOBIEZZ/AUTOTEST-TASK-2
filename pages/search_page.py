@@ -16,6 +16,7 @@ class SearchPage:
         self.loader = page.get_by_test_id("results-loader-svg")
         self.apply_button = page.get_by_test_id("apply-filters-button")
         self.search_button = page.get_by_test_id("search-button")
+        self.article_card = page.locator("article.news-card")
 
     def click_search_bar(self):
         self.search_bar.click()
@@ -34,13 +35,13 @@ class SearchPage:
         self.sort_select.click()
 
     def sort_by(self, option: SortOption):
-        self.sort_select.select_option(option.value)
+        self.sort_select.select_option(option)
 
     def apply_filter(self):
         self.apply_button.click()
 
     def get_prices(self, n: int) -> list[int]:
-        cards = self.page.locator("article.news-card").all()[:n]
+        cards = self.article_card.all()[:n]
 
         prices = []
         for card in cards:
