@@ -1,0 +1,6 @@
+{
+    "environment": "staging",
+    "urls": {
+        "base_url": "http://144.31.63.127:5000/"
+    }
+}
